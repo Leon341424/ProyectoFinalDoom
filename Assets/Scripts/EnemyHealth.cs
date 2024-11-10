@@ -5,6 +5,9 @@ public class EnemyHealth : MonoBehaviour
     public int health = 50;
     public AudioSource damageSound;
 
+    public delegate void EnemyDefeated();
+    public event EnemyDefeated OnEnemyDefeated;
+
     public void TakeDamage(int damage)
     {
         health -= damage;
@@ -14,7 +17,7 @@ public class EnemyHealth : MonoBehaviour
         }
         if (damageSound != null)
         {
-            damageSound.Play(); // Reproducir el sonido asignado al AudioSource
+            damageSound.Play();
             Debug.Log("Sonido de disparo reproducido");
         }
         if (health <= 0)
@@ -23,7 +26,7 @@ public class EnemyHealth : MonoBehaviour
         }
     }
 
-    void Die()
+    public void Die()
     {
         Debug.Log("Enemigo destruido");
 	Movimientoaleatorio movimiento = GetComponent<Movimientoaleatorio>();
@@ -31,8 +34,14 @@ public class EnemyHealth : MonoBehaviour
     {
         movimiento.enabled = false;
     }
+    OnEnemyDefeated?.Invoke();
+    
+    gameObject.SetActive(false);
+    }
 
-    // Destruye el objeto enemigo
-    Destroy(gameObject);
+    public void ResetEnemy()
+    {
+        health = 50;
+        gameObject.SetActive(true);
     }
 }

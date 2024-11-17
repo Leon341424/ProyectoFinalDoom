@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI; 
+using TMPro;
 
 public class EnemySpawner : MonoBehaviour
 {
@@ -11,6 +13,8 @@ public class EnemySpawner : MonoBehaviour
     private int enemiesDefeated = 0; 
     private int currentEnemyIndex = 2; 
     public int indexInicio = 0;
+
+    public TextMeshProUGUI EnemyText;
 
     public void Inicio()
     {
@@ -35,10 +39,18 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
+    public void UpdateEnemyUI()
+    {
+        if (EnemyText != null)
+        {
+            EnemyText.text = enemiesDefeated + "/10";
+        }
+    }
+
     public void OnEnemyDefeated()
     {
         enemiesDefeated++;
-
+        UpdateEnemyUI();
         Debug.Log("Enemigo derrotado. Total derrotados: " + enemiesDefeated);
         if (currentEnemyIndex < totalEnemies - 1)
         {
